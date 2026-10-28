@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class GUISite implements FormulaireInt
 {
     private Site site;  // Le site
+    private Commande commande;
 
     // Constructeur
     //
@@ -32,6 +33,7 @@ public class GUISite implements FormulaireInt
         form.addButton("AFF_COMMANDE","Afficher");
         form.addLabel("");
         form.addButton("LIVRER", "Livrer");
+        form.addButton("MODIFIER", "Modifier");
 
         form.setPosition(400,0);
         form.addZoneText("RESULTATS","Resultats",
@@ -83,6 +85,18 @@ public class GUISite implements FormulaireInt
 
             form.setValeurChamp("RESULTATS", res);
         }
-    }
 
+        if (nomSubmit.equals("MODIFIER")) {
+            int num = Integer.parseInt(form.getValeurChamp("NUM_COMMANDE"));
+            Commande c = site.trouverCommande(num);
+
+            if (c == null) {
+                form.setValeurChamp("RESULTATS", "Commande inexistante");
+            } else if (c.isLivre()) {
+                form.setValeurChamp("RESULTATS", "Commande " + c.getNumero() + " déjà livrée : modification impossible");
+            } else {
+                new GUIModifierCommande(c);
+            }
+        }
+    }
 }

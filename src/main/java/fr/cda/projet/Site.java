@@ -29,8 +29,6 @@ public class Site
         //  pour chaque ligne on cree une commande ou on ajoute une reference
         // AC AC
         initialiserCommande("data/Commandes.txt");
-
-        
     }
     
     // Methode qui retourne sous la forme d'une chaine de caractere
@@ -58,9 +56,6 @@ public class Site
         return res;
     }
 
-
-
-    /** Retourne la commande de ce numéro, ou null si elle n'existe pas. */
     public Commande trouverCommande(int numero) {
         for (Commande c : commandes) {
             if (c.getNumero() == numero) {

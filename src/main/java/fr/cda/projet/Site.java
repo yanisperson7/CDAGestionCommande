@@ -27,8 +27,9 @@ public class Site
 
         // acces à la bdd
         //  pour chaque ligne on cree une commande ou on ajoute une reference
+        // AC AC
         initialiserCommande("data/Commandes.txt");
-        // AC AC 
+
         
     }
     
@@ -53,16 +54,26 @@ public class Site
         for (Commande commande : commandes) {
             res=res+commande.toString();
         }
-        //res=res+"Les commandes sont concatenes dans une chaine";
 
         return res;
     }
+
+
 
     /** Retourne la commande de ce numéro, ou null si elle n'existe pas. */
     public Commande trouverCommande(int numero) {
         for (Commande c : commandes) {
             if (c.getNumero() == numero) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    public Produit trouverProduit(String reference) {
+        for (Produit p : stock) {
+            if (p.getReference().equals(reference)) {
+                return p;
             }
         }
         return null;
@@ -84,7 +95,7 @@ public class Site
 
     // Chargement des données du stock
     //
-    private void initialiserStock(String nomFichier)
+    public void initialiserStock(String nomFichier)
     {
         String[] lignes = Terminal.lireFichierTexte(nomFichier);
         if (lignes == null) {
@@ -116,7 +127,7 @@ public class Site
         }
     }
 
-    private void initialiserCommande(String nomFichier)
+    public void initialiserCommande(String nomFichier)
     {
         String[] lignes = Terminal.lireFichierTexte(nomFichier);
         if (lignes == null) {
@@ -151,5 +162,42 @@ public class Site
                 System.out.println("Ligne mal écrite (champs manquants) : " + ligne);
             }
         }
+    }
+
+    public ArrayList<Commande> livraison() {
+        ArrayList<Commande> nonLivrees = new ArrayList<>();
+
+        for (Commande c : commandes) {
+            if(c.isLivre()) {
+                continue;
+            }
+
+            String manque = "";
+
+            for (String ligne : c.getReferences()) {
+                String[] separateur = ligne.split("=");
+                String reference = separateur[0];
+                int quantiteDemande = Integer.parseInt(separateur[1]);
+                Produit p = trouverProduit(reference);
+
+                if (quantiteDemande > p.getQuantite()) {
+                    manque = manque + "Il manque " + (quantiteDemande - p.getQuantite()) + " " + reference + "\n";
+                }
+            }
+
+            if (manque.equals("")) {
+                for(String ligne : c.getReferences()) {
+                    String[] separateur = ligne.split("=");
+                    Produit p = trouverProduit(separateur[0]);
+                    int quantiteDemande = Integer.parseInt(separateur[1]);
+                    p.setQuantite(p.getQuantite() - quantiteDemande);
+                }
+                c.setLivre(true);
+            } else {
+                c.setRaisonPasLivre(manque);
+                nonLivrees.add(c);
+            }
+        }
+        return nonLivrees;
     }
 }

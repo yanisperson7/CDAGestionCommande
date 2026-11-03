@@ -2,19 +2,25 @@ package fr.cda.models;
 
 import java.util.*;
 
-// Classe de definition d'un produit du stock
-//
+/**
+ * Un produit du stock du site de vente.
+ * Un produit est identifié par sa référence unique et utilisée dans les bons de commande.
+ */
 public class Produit
 {
-    // Les caracteristiques d'un Produit
-    //
     private String  reference;      // reference du produit
     private String  nom;            // nom du produit
     private double  prix;           // prix du produit
     private int     quantite;       // quantit� du produit
 
-    // Constructeur
-    //
+    /**
+     * Crée un produit.
+     *
+     * @param reference la référence unique du produit
+     * @param nom       le nom du produit
+     * @param prix      le prix en euros
+     * @param quantite  la quantité en stock
+     */
     public Produit(String reference,
                    String nom,
                    double prix,
@@ -58,8 +64,11 @@ public class Produit
         this.quantite = quantite;
     }
 
-    // Conversion en chaine
-    //
+    /**
+     * Retourne le produit sous forme de texte aligné en colonnes.
+     *
+     * @return la référence, le nom, le prix et la quantité du produit
+     */
     public String toString()
     {
         return String.format("%-15s %-50s %3.2f   %3d",reference,nom,prix,quantite);

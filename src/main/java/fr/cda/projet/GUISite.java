@@ -3,17 +3,22 @@ package fr.cda.projet;
 import fr.cda.ihm.*;
 import fr.cda.models.Commande;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
-// Classe de definition de l'IHM principale du compte
-//
+/**
+ * Fenêtre principale de l'application : affichage du stock et des commandes,
+ * livraison, modification d'une commande, calcul des ventes et envoi par email.
+ */
 public class GUISite implements FormulaireInt
 {
     private Site site;  // Le site
-    private Commande commande;
 
-    // Constructeur
-    //
+     /**
+     * Crée et affiche la fenêtre principale avec ses boutons et la zone de résultats.
+     *
+     * @param site le site de vente affiché par la fenêtre
+     */
     public GUISite(Site site)
     {
         this.site = site;
@@ -34,6 +39,8 @@ public class GUISite implements FormulaireInt
         form.addLabel("");
         form.addButton("LIVRER", "Livrer");
         form.addButton("MODIFIER", "Modifier");
+        form.addButton("CALCULER", "Calculer ventes");
+        form.addButton("EMAIL", "Email");
 
         form.setPosition(400,0);
         form.addZoneText("RESULTATS","Resultats",
@@ -45,8 +52,16 @@ public class GUISite implements FormulaireInt
         form.afficher();
     }
 
-    // Methode appellee quand on clique dans un bouton
-    //
+    /**
+     * Appelée à chaque clic sur un bouton : exécute l'action correspondante
+     * et affiche le résultat dans la zone RESULTATS (ou dans une fenêtre modale
+     * pour l'envoi d'email).
+     * Le bouton Modifier n'ouvre la fenêtre de modification que si la
+     * commande existe et n'est pas déjà livrée.
+     *
+     * @param form      le formulaire contenant le bouton
+     * @param nomSubmit le nom du bouton cliqué (AFF_STOCK, LIVRER, MODIFIER...)
+     */
     public void submit(Formulaire form,String nomSubmit)
     {
 
@@ -67,10 +82,14 @@ public class GUISite implements FormulaireInt
         // Affichage d'une commande
         //
         if (nomSubmit.equals("AFF_COMMANDE")) {
+            try {
                 String numStr = form.getValeurChamp("NUM_COMMANDE");
-                int num = Integer.parseInt(numStr);
+                int num = Integer.parseInt(numStr.trim());
                 String res = site.listerCommande(num);
-                form.setValeurChamp("RESULTATS",res);
+                form.setValeurChamp("RESULTATS", res);
+            } catch (NumberFormatException e) {
+                form.setValeurChamp("RESULTATS", "Numéro de commande invalide : saisissez un nombre entier");
+            }
         }
 
         //Affichage des commandes non livrées
@@ -86,16 +105,42 @@ public class GUISite implements FormulaireInt
             form.setValeurChamp("RESULTATS", res);
         }
 
+        // Modification d'une commande non livrée
+        //
         if (nomSubmit.equals("MODIFIER")) {
-            int num = Integer.parseInt(form.getValeurChamp("NUM_COMMANDE"));
-            Commande c = site.trouverCommande(num);
+            try {
+                int num = Integer.parseInt(form.getValeurChamp("NUM_COMMANDE").trim());
+                Commande c = site.trouverCommande(num);
 
-            if (c == null) {
-                form.setValeurChamp("RESULTATS", "Commande inexistante");
-            } else if (c.isLivre()) {
-                form.setValeurChamp("RESULTATS", "Commande " + c.getNumero() + " déjà livrée : modification impossible");
+                if (c == null) {
+                    form.setValeurChamp("RESULTATS", "Commande inexistante");
+                } else if (c.isLivre()) {
+                    form.setValeurChamp("RESULTATS", "Commande " + c.getNumero() + " déjà livrée : modification impossible");
+                } else {
+                    new GUIModifierCommande(c);
+                }
+            } catch (NumberFormatException e) {
+                form.setValeurChamp("RESULTATS", "Numéro de commande invalide : saisissez un nombre entier");
+            }
+        }
+
+        // Détail et somme des ventes
+        //
+        if (nomSubmit.equals("CALCULER")) {
+            String res = site.calculerVentes();
+            form.setValeurChamp("RESULTATS", "SOMME : " + res + " euros");
+        }
+
+        // Envoi de l'état par email
+        //
+        if (nomSubmit.equals("EMAIL")) {
+            site.ecrireEtat();
+            boolean ok = EnvoiMail.envoyer("data/etat.txt");
+
+            if (ok) {
+                JOptionPane.showMessageDialog(null, "Email envoyé avec succès");
             } else {
-                new GUIModifierCommande(c);
+                JOptionPane.showMessageDialog(null, "Échec de l'envoi de l'email");
             }
         }
     }

@@ -6,10 +6,21 @@ import fr.cda.models.Commande;
 
 import java.util.ArrayList;
 
+/**
+ * Fenêtre de modification des quantités d'un bon de commande non livré.
+ * Elle affiche une zone de saisie par référence de la commande,
+ * préremplie avec la quantité actuelle.
+ */
 public class GUIModifierCommande implements FormulaireInt {
 
     private Commande commande;
 
+    /**
+     * Crée et affiche la fenêtre : une zone de saisie par ligne de la commande,
+     * nommée par la référence du produit, et un bouton Valider.
+     *
+     * @param commande la commande à modifier (doit être non livrée)
+     */
     public GUIModifierCommande(Commande commande) {
         this.commande = commande;
 
@@ -28,6 +39,15 @@ public class GUIModifierCommande implements FormulaireInt {
         form.afficher();
     }
 
+    /**
+     * Au clic sur Valider, relit les quantités saisies, vérifie que ce sont
+     * des entiers positifs ou nuls, met à jour la commande puis ferme la fenêtre.
+     * Si une quantité est invalide, un message est affiché, rien n'est enregistré
+     * et la fenêtre reste ouverte.
+     *
+     * @param form      le formulaire de modification
+     * @param nomSubmit le nom du bouton cliqué
+     */
     @Override
     public void submit(Formulaire form, String nomSubmit) {
         if (nomSubmit.equals("VALIDER")) {

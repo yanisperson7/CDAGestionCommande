@@ -3,20 +3,20 @@ package fr.cda.util;
 import java.io.*;
 import java.util.*;
 
-/** La classe Terminal permet de réaliser ses premiers programmes Java en permettant d'afficher dans la console d'exécution des données de type différents, et en permettant de saisir au clavier des données de type différents.<BR>
-    Elle permet aussi de lire et écrire un fichier texte
-    Cette classe contient que des méthodes statiques. */
+/** La classe Terminal permet de rÃ©aliser ses premiers programmes Java en permettant d'afficher dans la console d'exÃ©cution des donnÃ©es de type diffÃ©rents, et en permettant de saisir au clavier des donnÃ©es de type diffÃ©rents.<BR>
+    Elle permet aussi de lire et Ã©crire un fichier texte
+    Cette classe contient que des mÃ©thodes statiques. */
 public class Terminal{    
 
     // Le buffer standard  de lecture = le clavier
     private static BufferedReader in =
         new BufferedReader(new InputStreamReader(System.in));
 
-    /** Cette méthode lit un fichier texte et retourne le contenu du fichier sous la forme d'un  tableau de String dont chaque element est une ligne du fichier.
-        @param nomFichier le nom du fichier qui doit être dans le répertoire courant.
+    /** Cette mÃ©thode lit un fichier texte et retourne le contenu du fichier sous la forme d'un  tableau de String dont chaque element est une ligne du fichier.
+        @param nomFichier le nom du fichier qui doit Ãªtre dans le rÃ©pertoire courant.
         @return String[] le contenu du fichier. 
-        @exception TerminalException (de type RuntimeException) si erreur d'écriture<BR>
-        Rappel : Une exception de type RuntimeException n'a pas l'obligation d'être capturée.
+        @exception TerminalException (de type RuntimeException) si erreur d'Ã©criture<BR>
+        Rappel : Une exception de type RuntimeException n'a pas l'obligation d'Ãªtre capturÃ©e.
 */
     public static String[] lireFichierTexte(String nomFichier)
     {
@@ -29,12 +29,12 @@ public class Terminal{
             fis.close();
             String str = new String(buffer);
 
-            // On enleve le caractère '\r' code 13 qui est ajouté en Windows
-            // Les fins de ligne dans un fichier texte créé sous Windows
+            // On enleve le caractÃ¨re '\r' code 13 qui est ajoutÃ© en Windows
+            // Les fins de ligne dans un fichier texte crÃ©Ã© sous Windows
             //  se termine par \r\n.
             // Il faut enlever le \r car il a des effets perturbant sur
-            //  la méthode System.out.print et est pris comme un caractère de plus
-            //  qu'il faut éliminer
+            //  la mÃ©thode System.out.print et est pris comme un caractÃ¨re de plus
+            //  qu'il faut Ã©liminer
             //  
             String texte = str.replaceAll(""+(char)(13),"");
             
@@ -47,10 +47,10 @@ public class Terminal{
         catch(Exception ex) {return null;}
     }
 
-    /** Cette méthode permet de créer un fichier texte à partir du contenu d'un StringBuffer.
-        @param nomFichier Le nom du fichier qui est créé dans le répertoire courant
-        @param strbuf Le StringBuffer contenant le texte à écrire. 
-        @exception TerminalException (de type RuntimeException) si erreur d'écriture
+    /** Cette mÃ©thode permet de crÃ©er un fichier texte Ã  partir du contenu d'un StringBuffer.
+        @param nomFichier Le nom du fichier qui est crÃ©Ã© dans le rÃ©pertoire courant
+        @param strbuf Le StringBuffer contenant le texte Ã  Ã©crire. 
+        @exception TerminalException (de type RuntimeException) si erreur d'Ã©criture
     */
     public static void ecrireFichier(String nomFichier,
                                      StringBuffer strbuf)
@@ -69,8 +69,8 @@ public class Terminal{
             }
     }
 
-    /** Cette méthode lit une chaîne de caractère
-        @return String la chaîne saisie dans la console d'exécution
+    /** Cette mÃ©thode lit une chaÃ®ne de caractÃ¨re
+        @return String la chaÃ®ne saisie dans la console d'exÃ©cution
        @exception TerminalException (de type RuntimeException) si erreur de lecture
     */
     public static String lireString() // Lire un String
@@ -87,8 +87,8 @@ public class Terminal{
         return tmp;
     }
 
-    /** Cette méthode lit un entier
-        @return int L'entier saisi dans la console d'exécution
+    /** Cette mÃ©thode lit un entier
+        @return int L'entier saisi dans la console d'exÃ©cution
        @exception TerminalException (de type RuntimeException) si la saisie n'est pas un entier ou erreur de lecture
     */
     public static int lireInt()  // Lire un entier
@@ -103,8 +103,8 @@ public class Terminal{
         return x ;
     }
 
-    /** Cette méthode lit un boolean (false ou true)
-        @return boolean Le boolean saisi dans la console d'exécution
+    /** Cette mÃ©thode lit un boolean (false ou true)
+        @return boolean Le boolean saisi dans la console d'exÃ©cution
        @exception TerminalException (de type RuntimeException) si erreur de lecture. <BR>
        Tout autre valeur que TRUE, FALSE, true ou false, retourne la valeur false
     */
@@ -120,8 +120,8 @@ public class Terminal{
         return b;
     }
 
-    /** Cette méthode lit un double
-        @return double Le double saisi dans la console d'exécution
+    /** Cette mÃ©thode lit un double
+        @return double Le double saisi dans la console d'exÃ©cution
        @exception TerminalException (de type RuntimeException) si la valeur saisie n'est pas un double ou ereur de lecture.
     */
     public  static double lireDouble()  // Lire un double
@@ -136,9 +136,9 @@ public class Terminal{
         return x ;
     }
 
-    /** Cette méthode lit un caractère.
+    /** Cette mÃ©thode lit un caractÃ¨re.
        @exception TerminalException (de type RuntimeException) si erreur de lecture.<BR>
-       Si on saisit plus d'1 caractère alors le caractère retourné est le premier.
+       Si on saisit plus d'1 caractÃ¨re alors le caractÃ¨re retournÃ© est le premier.
     */
     public  static char lireChar()  // Lire un caractere
     {
@@ -151,14 +151,14 @@ public class Terminal{
             }
     }
 
-    /** Cette méthode écrit une chaine et ne revient pas à la ligne.
+    /** Cette mÃ©thode Ã©crit une chaine et ne revient pas Ã  la ligne.
         @param s la chaine &agrave; &eacute;crire
     */
     public static void ecrireString(String s){ // Afficher un String
         System.out.print(s);
     }
 
-    /** Cette méthode écrit une chaine et revient à la ligne.
+    /** Cette mÃ©thode Ã©crit une chaine et revient Ã  la ligne.
         @param s la chaine &agrave; &eacute;crire
     */
     public static void ecrireStringln(String s) // Afficher un String
@@ -167,16 +167,16 @@ public class Terminal{
         sautDeLigne();
     }
 
-    /** Cette méthode écrit un entier et ne revient pas à la ligne.
-        @param i l'entier à écrire
+    /** Cette mÃ©thode Ã©crit un entier et ne revient pas Ã  la ligne.
+        @param i l'entier Ã  Ã©crire
     */
     public static void ecrireInt(int i)  // Afficher un entier
     {
         ecrireString(""+i);
     }
 
-    /** Cette méthode écrit un entier et revient à la ligne.
-        @param i l'entier à écrire
+    /** Cette mÃ©thode Ã©crit un entier et revient Ã  la ligne.
+        @param i l'entier Ã  Ã©crire
     */
     public static void ecrireIntln(int i)  // Afficher un entier
     {
@@ -184,31 +184,31 @@ public class Terminal{
         sautDeLigne();
     }
 
-    /** Cette méthode écrit un booléan et ne revient pas à la ligne.
-        @param b le booléen à écrire
+    /** Cette mÃ©thode Ã©crit un boolÃ©an et ne revient pas Ã  la ligne.
+        @param b le boolÃ©en Ã  Ã©crire
     */
     public static void ecrireBoolean(boolean b){
         ecrireString(""+b);
     }
 
-    /** Cette méthode écrit un booléan et revient à la line.
-        @param b le booléen à écrire
+    /** Cette mÃ©thode Ã©crit un boolÃ©an et revient Ã  la line.
+        @param b le boolÃ©en Ã  Ã©crire
     */
     public static void ecrireBooleanln(boolean b){
         ecrireString(""+b);
         sautDeLigne();
     }
 
-    /** Cette méthode écrit un double et ne revient pas à la ligne.
-        @param d le double à écrire
+    /** Cette mÃ©thode Ã©crit un double et ne revient pas Ã  la ligne.
+        @param d le double Ã  Ã©crire
     */
     public  static void ecrireDouble(double d)  // Afficher un double
     {
         ecrireString(""+d);
     }
 
-    /** Cette méthode écrit un double et revient à la ligne.
-        @param d le double à écrire
+    /** Cette mÃ©thode Ã©crit un double et revient Ã  la ligne.
+        @param d le double Ã  Ã©crire
     */
     public  static void ecrireDoubleln(double d)  // Afficher un double
     {
@@ -216,16 +216,16 @@ public class Terminal{
         sautDeLigne();
     }
 
-    /** Cette méthode écrit un caractère et ne revient pas à la ligne.
-        @param c le caractère à écrire
+    /** Cette mÃ©thode Ã©crit un caractÃ¨re et ne revient pas Ã  la ligne.
+        @param c le caractÃ¨re Ã  Ã©crire
     */
     public  static void ecrireChar(char c)  // Afficher un caractere
     {
         ecrireString(""+c);
     }  
 
-    /** Cette méthode écrit un caractère et revient à la ligne.
-        @param c le caractère à écrire
+    /** Cette mÃ©thode Ã©crit un caractÃ¨re et revient Ã  la ligne.
+        @param c le caractÃ¨re Ã  Ã©crire
     */
     public  static void ecrireCharln(char c)  // Afficher un caractere
     {
@@ -233,7 +233,7 @@ public class Terminal{
         sautDeLigne();
     }
 
-    /** Cette méthode revient à la ligne.
+    /** Cette mÃ©thode revient Ã  la ligne.
     */
     public static void sautDeLigne(){
         try{
@@ -243,15 +243,15 @@ public class Terminal{
         }
     }
 
-    /** Cette méthode retourne l'exception TerminalException
+    /** Cette mÃ©thode retourne l'exception TerminalException
     */
     protected static void exceptionHandler(Exception ex){
         TerminalException err = new TerminalException(ex);
         throw err;
     }
 
-    /** Cette méthode écrit une exception avec la pile dans la console
-        @param ex l'exception à écrire
+    /** Cette mÃ©thode Ã©crit une exception avec la pile dans la console
+        @param ex l'exception Ã  Ã©crire
     */
     public static void ecrireException(Throwable ex){
         ecrireString(ex.toString());

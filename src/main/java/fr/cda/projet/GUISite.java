@@ -2,8 +2,12 @@ package fr.cda.projet;
 
 import fr.cda.ihm.*;
 import fr.cda.models.Commande;
+import fr.cda.util.Terminal;
 
+import javax.crypto.SecretKey;
 import javax.swing.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +45,7 @@ public class GUISite implements FormulaireInt
         form.addButton("MODIFIER", "Modifier");
         form.addButton("CALCULER", "Calculer ventes");
         form.addButton("EMAIL", "Email");
+        form.addButton("SAUVEGARDE", "Sauvegarde");
 
         form.setPosition(400,0);
         form.addZoneText("RESULTATS","Resultats",
@@ -117,7 +122,7 @@ public class GUISite implements FormulaireInt
                 } else if (c.isLivre()) {
                     form.setValeurChamp("RESULTATS", "Commande " + c.getNumero() + " déjà livrée : modification impossible");
                 } else {
-                    new GUIModifierCommande(c);
+                    new GUIModifierCommande(c, site);
                 }
             } catch (NumberFormatException e) {
                 form.setValeurChamp("RESULTATS", "Numéro de commande invalide : saisissez un nombre entier");
@@ -135,12 +140,29 @@ public class GUISite implements FormulaireInt
         //
         if (nomSubmit.equals("EMAIL")) {
             site.ecrireEtat();
-            boolean ok = EnvoiMail.envoyer("data/etat.txt");
+            Thread t = new Thread(new EnvoiEmailThread("data/etat.txt"));
+            t.start();
+        }
 
-            if (ok) {
-                JOptionPane.showMessageDialog(null, "Email envoyé avec succès");
-            } else {
-                JOptionPane.showMessageDialog(null, "Échec de l'envoi de l'email");
+        if (nomSubmit.equals("SAUVEGARDE")) {
+            try {
+                Path fichierCle = Path.of("data/cle.aes");
+
+                SecretKey cle;
+                if (Files.exists(fichierCle)) {
+                    cle = ChiffrementAES.chargerCle(fichierCle);
+                } else {
+                    cle = ChiffrementAES.genererCle();
+                    ChiffrementAES.sauvegarderCle(cle, fichierCle);
+                }
+
+                String[] lignes = Terminal.lireFichierTexte("data/Commandes.txt");
+                String texte = String.join("\n", lignes);
+
+                ChiffrementAES.chiffrer(texte, cle, Path.of("data/Commandes.aes"));
+                JOptionPane.showMessageDialog(null, "Sauvegarde chiffrée créée");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Échec de la sauvegarde : " + e.getMessage());
             }
         }
     }

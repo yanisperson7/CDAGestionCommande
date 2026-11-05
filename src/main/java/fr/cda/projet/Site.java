@@ -273,4 +273,16 @@ public class Site
         String texte = calculerVentes();
         Terminal.ecrireFichier("data/etat.txt", new StringBuffer(texte));
     }
+
+    public void ecrireCommandes() {
+        String texte = "";
+
+        for (Commande c : commandes) {
+            for (String reference : c.getReferences()) {
+                texte = texte + c.getNumero() + ";" + c.getDate() + ";" + c.getClient() + ";" + reference + "\n";
+            }
+        }
+
+        Terminal.ecrireFichier("data/Commandes.txt", new StringBuffer(texte));
+    }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class GUIModifierCommande implements FormulaireInt {
 
     private Commande commande;
+    private Site site;
 
     /**
      * Crée et affiche la fenêtre : une zone de saisie par ligne de la commande,
@@ -21,8 +22,9 @@ public class GUIModifierCommande implements FormulaireInt {
      *
      * @param commande la commande à modifier (doit être non livrée)
      */
-    public GUIModifierCommande(Commande commande) {
+    public GUIModifierCommande(Commande commande, Site site) {
         this.commande = commande;
+        this.site = site;
 
         // Creation du formulaire
         Formulaire form = new Formulaire("Modification d'un bon de commande",this,550,365);
@@ -61,6 +63,7 @@ public class GUIModifierCommande implements FormulaireInt {
             }
 
             commande.setReferences(references);
+            site.ecrireCommandes();
             form.fermer();
         }
     }

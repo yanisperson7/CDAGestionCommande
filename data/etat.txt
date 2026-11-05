@@ -1,7 +1,15 @@
 COMMANDE : 1
 Les Miserables de Victor Hugo   1   8.5
 La Peste de Albert Camus   2   8.5
-Pantalon bleu taille 44 homme   3   12.0
+Pantalon bleu taille 44 homme   2   12.0
+
+COMMANDE : 2
+Pantalon jean femme 48   3   23.0
+T-shirt rose femme 52   0   30.0
+Le Père Goriot de Honoré de Balzac   5   11.0
+
+COMMANDE : 3
+Les Miserables de Victor Hugo   5   8.5
 
 ====================
-SOMME : 61.5 euros
+SOMME : 216.0 euros

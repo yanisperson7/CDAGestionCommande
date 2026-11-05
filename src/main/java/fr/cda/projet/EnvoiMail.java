@@ -2,6 +2,9 @@ package fr.cda.projet;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -11,16 +14,6 @@ import java.util.Properties;
  * figurer dans le code source ni sur GitHub.
  */
 public class EnvoiMail {
-
-    /** Adresse du compte Gmail qui envoie le courriel. */
-    private static final String EXPEDITEUR = "yanisperson7@gmail.com";
-    /** Adresse qui reçoit le courriel. */
-    private static final String DESTINATAIRE = "yanisperson7@gmail.com";
-    /** Objet du courriel. */
-    private static final String SUJET = "Etat des bons de commande livrés";
-    /** Texte du courriel (l'état est en pièce jointe). */
-    private static final String CORPS = "Bonjour, veuillez trouver ici l'état des commandes livrées.";
-
     /**
      * Envoie un mail avec le fichier donné en pièce jointe.
      * Le destinataire, l'objet et le corps sont définis par des variables.
@@ -32,12 +25,20 @@ public class EnvoiMail {
      * @return true si l'envoi a réussi, false sinon
      */
     public static boolean envoyer(String fichier) {
-        // Sécurité : Variable d'environnement
-        final String motDePasse = System.getenv("MAIL_PASSWORD"); // Demande au système la valeur de la variable d’environnement "MAIL_PASSWORD" (Run configuration)
-        if (motDePasse == null) {
-            System.out.println("Variable MAIL_PASSWORD absente");
+        Properties constantes = new Properties();
+
+        try (FileInputStream flux = new FileInputStream("constantes.properties")) {
+            constantes.load(flux);
+        } catch (IOException e) {
+            System.out.println("Impossible de lire constantes.properties : " + e.getMessage());
             return false;
         }
+
+        String expediteur = constantes.getProperty("mail.expediteur");
+        String destinataire = constantes.getProperty("mail.destinataire");
+        String sujet = constantes.getProperty("mail.sujet");
+        String corps = constantes.getProperty("mail.corps");
+        String motDePasse = constantes.getProperty("mail.motdepasse");
 
         // Clé Valeur de type String
         Properties prop = new Properties();
@@ -50,14 +51,14 @@ public class EnvoiMail {
         // Session de messagerie
         Session session = Session.getInstance(prop, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(EXPEDITEUR, motDePasse);
+                return new PasswordAuthentication(expediteur, motDePasse);
             }
         });
 
         try {
             // le texte
             MimeBodyPart texte = new MimeBodyPart();
-            texte.setText(CORPS);
+            texte.setText(corps);
 
             // le fichier joint
             MimeBodyPart piece = new MimeBodyPart();
@@ -70,9 +71,9 @@ public class EnvoiMail {
 
             // Crée le message
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EXPEDITEUR)); // Format valide
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(DESTINATAIRE)); // Destinaitaires
-            message.setSubject(SUJET); // Objet
+            message.setFrom(new InternetAddress(expediteur)); // Format valide
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinataire)); // Destinaitaires
+            message.setSubject(sujet); // Objet
             message.setContent(contenu); // Pose le contenu
 
             // Ouverture de connexion, authentification et transmission du message

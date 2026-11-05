@@ -5,10 +5,9 @@
 //
 package fr.cda.projet;
 
-import fr.cda.models.Commande;
 import fr.cda.util.*;
-
-import java.util.ArrayList;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 /**
  * Classe principale de l'application : crée le site de vente
@@ -16,8 +15,7 @@ import java.util.ArrayList;
  */
 public class Projet
 {
-    public static void main(String a_args[])
-    {
+    public static void main(String a_args[]) throws IOException, GeneralSecurityException {
         Terminal.ecrireStringln("Execution du projet ");
 
         Site site = new Site();
